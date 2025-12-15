@@ -1,4 +1,4 @@
-# 2. Use FastMCP framework
+# 2. FastMCP フレームワークの採用
 
 Date: 2025-12-16
 
@@ -8,9 +8,9 @@ Accepted
 
 ## Context
 
-When implementing the MCP server in Python, we needed to choose how to define tools.
+Python で MCP サーバーを実装する際、ツールの定義方法を選択する必要があった。
 
-The official MCP SDK requires manual tool schema definitions:
+公式 MCP SDK では手動でツールスキーマを定義する必要がある:
 
 ```python
 TOOLS = [
@@ -30,22 +30,22 @@ TOOLS = [
 
 ## Decision
 
-Adopted FastMCP and migrated to decorator-based tool definitions.
+FastMCP を採用し、デコレーターベースのツール定義に移行する。
 
 ```python
 @mcp.tool()
 def greet(name: str) -> str:
-    """Greet a user by name.
+    """ユーザーに挨拶する。
 
     Args:
-        name: Name of the user to greet.
+        name: 挨拶するユーザーの名前。
     """
     return f"Hello, {name}!"
 ```
 
 ## Consequences
 
-- Code reduced by approximately 50%
-- Function definitions directly become tool definitions, with descriptions auto-generated from docstrings
-- Schemas are auto-generated from type hints
-- Added dependency on FastMCP
+- コード量が約 50% 削減
+- 関数定義がそのままツール定義になり、説明は docstring から自動生成される
+- スキーマは型ヒントから自動生成される
+- FastMCP への依存が追加される
