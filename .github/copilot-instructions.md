@@ -96,3 +96,20 @@ Documents under `docs/` are Git tracked, so the following are prohibited:
 - ruff for linting and formatting
 - mypy for type checking
 - pytest for testing
+
+## Development Commands
+
+```bash
+# Setup
+uv sync
+
+# Development
+make dev      # Start development server
+make inspect  # Open MCP Inspector
+
+# Quality checks
+make lint     # Run linter
+make fix      # Auto-fix + format
+make test     # Run tests
+make typecheck # Type checking
+```
