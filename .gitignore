@@ -9,7 +9,8 @@
 .github/copilot-instructions.local.md
 
 # PDD (Plan-Driven Development)
-.pdd/
+.pdd/*
+!.pdd/AGENTS.md
 
 # OS
 .DS_Store
