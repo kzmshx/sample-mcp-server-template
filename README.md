@@ -10,6 +10,7 @@ FastMCP を使用した MCP サーバー開発のテンプレートリポジト�
 - ADR (Architecture Decision Records) による設計判断の記録
 - GitHub Actions による CI/CD
 - GitHub Copilot / Claude Code 向けのエージェント設定
+- PDD (Plan Driven Development) ワークフロー
 
 ## セットアップ
 
@@ -52,6 +53,10 @@ make typecheck
 ```
 .
 ├── .github/
+│   ├── agents/                  # カスタムエージェント
+│   │   └── pdd.agent.md
+│   ├── prompts/                 # プロンプトテンプレート
+│   │   └── auto-commit.prompt.md
 │   ├── copilot-instructions.md  # Copilot Agent 向け設定
 │   └── workflows/               # GitHub Actions
 ├── .pdd/                        # 作業ドキュメント（Git除外）
@@ -68,14 +73,27 @@ make typecheck
 └── Makefile                     # 開発コマンド
 ```
 
+## 利用可能なツール
+
+### `greet`
+
+挨拶メッセージを返すサンプルツール。
+
+**パラメータ**:
+
+- `name` (string): 挨拶する相手の名前
+
+**使用例**:
+
+```
+greet("World")  # "Hello, World!"
+```
+
 ## ツールの追加方法
 
+1. `src/sample_mcp/tools.py` に実装を追加:
+
 ```python
-from fastmcp import FastMCP
-
-mcp = FastMCP("My MCP Server")
-
-@mcp.tool()
 def my_tool(param: str) -> str:
     """ツールの説明。
 
@@ -88,6 +106,24 @@ def my_tool(param: str) -> str:
     return f"Result: {param}"
 ```
 
+2. `src/sample_mcp/server.py` に登録:
+
+```python
+from sample_mcp.tools import my_tool as _my_tool
+
+@mcp.tool()
+def my_tool(param: str) -> str:
+    """ツールの説明。
+
+    Args:
+        param: パラメータの説明。
+
+    Returns:
+        戻り値の説明。
+    """
+    return _my_tool(param)
+```
+
 - 型ヒントから JSON Schema が自動生成される
 - docstring から説明が自動抽出される
 
@@ -98,6 +134,13 @@ main ブランチへのマージ時に release-please が自動で:
 1. Conventional Commits からリリース PR を作成
 2. CHANGELOG.md を更新
 3. バージョンをバンプ
+
+## 開発に貢献
+
+このプロジェクトへの貢献に興味がある方は、開発者向けドキュメントを参照してください：
+
+- [AGENTS.md](AGENTS.md): 開発哲学とワークフロー
+- [docs/adr/](docs/adr/): アーキテクチャ決定記録
 
 ## ライセンス
 
